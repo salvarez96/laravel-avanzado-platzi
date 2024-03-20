@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class ProductControllerTest extends TestCase
@@ -15,16 +16,18 @@ class ProductControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
     }
 
     public function test_authenticated_user_can_access_route()
     {
         /** @var Product $product */
         $product = Product::factory()->create();
-        /** @var User $user */
-        $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get("/api/products/{$product->getKey()}");
+        $response = $this->get("/api/products/{$product->getKey()}");
 
         $response->assertSuccessful();
     }
@@ -47,6 +50,7 @@ class ProductControllerTest extends TestCase
             'name' => 'Hola',
             'price' => 1000,
         ];
+
         $response = $this->postJson('/api/products', $data);
 
         $response->assertSuccessful();
