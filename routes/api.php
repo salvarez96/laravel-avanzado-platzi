@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserTokenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,10 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->resource('products', ProductController::class);
-// Route::controller(ProductController::class)->group(function () {
-//     Route::get('products', 'index');
-//     Route::get('products/{product}', 'show');
-//     Route::post('products', 'store');
-//     Route::patch('products/{product}', 'update');
-//     Route::delete('products/{product}', 'destroy');
-// });
+
+Route::post('sanctum/token', UserTokenController::class);
