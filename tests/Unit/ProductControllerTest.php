@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class ProductControllerTest extends TestCase
@@ -13,6 +15,18 @@ class ProductControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+    }
+
+    public function test_authenticated_user_can_access_route()
+    {
+        /** @var Product $product */
+        $product = Product::factory()->create();
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get("/api/products/{$product->getKey()}");
+
+        $response->assertSuccessful();
     }
 
     public function test_index()
