@@ -14,4 +14,8 @@ class Product extends Model
     public function categorizedProducts() {
         return $this->belongsToMany(Category::class);
     }
+
+    public function createdBy() {
+        return $this->belongsTo(User::class);
+    }
 }
