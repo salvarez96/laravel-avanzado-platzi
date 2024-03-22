@@ -16,7 +16,7 @@ class NewsletterNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(string $subject = null)
+    public function __construct(string $subject = 'Newsletter Nofitication')
     {
         $this->subject = $subject;
     }
@@ -37,7 +37,7 @@ class NewsletterNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject($this->subject ?? 'Newsletter Nofitication')
+                    ->subject($this->subject)
                     ->line('The introduction to the notification.')
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');

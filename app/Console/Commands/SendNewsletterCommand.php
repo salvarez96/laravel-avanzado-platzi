@@ -41,33 +41,39 @@ class SendNewsletterCommand extends Command
 
         if ($count) {
             if (User::whereNotNull('email_verified_at')->count() > 0) {
-                $this->_output()->progressStart($count);
+                $userCount = User::whereNotNull('email_verified_at')->count();
 
-                $builder->whereNotNull('email_verified_at')
+                $this->_output()->progressStart($userCount);
+
+                User::whereNotNull('email_verified_at')
                     ->each(function (User $user) {
-                        dd($user);
                         $user->notify(new NewsletterNotification());
                         $this->_output()->progressAdvance();
                     });
 
-                $this->output()->progressFinish();
-                return $this->newLine()->info("Se ". ($count === 1 ? "envió {$count} correo al usuario verificado." : "enviaron {$count} correos a usuarios verificados."));
+                $this->_output()->progressFinish();
+                $this->info("Se ". ($userCount === 1 ? "envió {$userCount} correo al usuario verificado." : "enviaron {$userCount} correos a usuarios verificados."));
+                $this->newLine();
             }
 
             if (isset($emails[0])) {
                 $this->_output()->progressStart($count);
 
-                $builder->whereNull('email_verified_at')->each(function (User $user) {
-                    $user->notify(new NewsletterNotification("Welcome {$user->name} :)"));
-                    $this->_output()->progressAdvance();
-                });
+                $builder->whereNull('email_verified_at')
+                    ->each(function (User $user) {
+                        $user->notify(new NewsletterNotification("Welcome {$user->name} :)"));
+                        $this->_output()->progressAdvance();
+                    });
 
                 $this->_output()->progressFinish();
-                return $this->newLine()->info("Se ". ($count === 1 ? "envió {$count} correo al usuario no verificado." : "enviaron {$count} correos de usuarios no verificados."));
+                $this->info("Se ". ($count === 1 ? "envió {$count} correo al usuario no verificado." : "enviaron {$count} correos a los usuarios no verificados."));
+                $this->newLine();
             }
+        } else {
+            $this->info('No se envió ningún correo.');
+            $this->newLine();
         }
 
-        return $this->info('No se envió ningún correo.');
     }
 
     /**
