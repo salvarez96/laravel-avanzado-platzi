@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserTokenController;
 use Illuminate\Http\Request;
@@ -23,3 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->resource('products', ProductController::class);
 
 Route::post('sanctum/token', UserTokenController::class);
+
+Route::post('newsletter', [NewsletterController::class, 'send']);

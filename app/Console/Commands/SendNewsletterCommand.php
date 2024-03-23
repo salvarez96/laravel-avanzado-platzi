@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Notifications\NewsletterNotification;
 use Illuminate\Console\Command;
 use Illuminate\Console\Concerns\InteractsWithIO;
+use Illuminate\Support\Facades\Log;
 
 class SendNewsletterCommand extends Command
 {
@@ -15,7 +16,7 @@ class SendNewsletterCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'send:newsletter {emails?*}';
+    protected $signature = 'send:newsletter {emails?* : Array of emails that\'ll be notified.}';
 
     /**
      * The console command description.
